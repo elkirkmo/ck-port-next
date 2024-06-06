@@ -3,9 +3,11 @@ import { list } from '@vercel/blob';
 
 export default function VideoBG() {
   return (
-    <Suspense fallback={<p>Loading video...</p>}>
-      <Video fileName={randomBackground()} />
-    </Suspense>
+    <div className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10">
+      <Suspense fallback={<p>Loading video...</p>}>
+        <Video fileName={randomBackground()} />
+      </Suspense>
+    </div>
   );
 }
 
@@ -24,7 +26,7 @@ const Video = async ({ fileName }: VideoProps) => {
     prefix: fileName,
   });
   return (
-    <div className="bg-sky-500/35 absolute left-0 top-0 w-lvw h-dvh object-cover">
+    <div className=" absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
         className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10"
         playsInline
