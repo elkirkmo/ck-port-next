@@ -10,9 +10,11 @@ export default function VideoBG() {
 }
 
 const backgroundVideoNames = process.env.BG_VIDEO_ARRAY?.split(',') || [];
-console.log(backgroundVideoNames);
 const randomBackground = () =>
-  backgroundVideoNames[(Math.random() * backgroundVideoNames.length) | 0];
+  backgroundVideoNames[
+    (Math.random() * backgroundVideoNames.length) | 0
+  ].trim();
+
 interface VideoProps {
   fileName: string;
 }
@@ -21,7 +23,6 @@ const Video = async ({ fileName }: VideoProps) => {
   const { blobs } = await list({
     prefix: fileName,
   });
-  console.log(blobs);
   return (
     <div className="bg-sky-500/35 absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
