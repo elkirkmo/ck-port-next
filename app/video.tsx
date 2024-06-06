@@ -1,16 +1,36 @@
-export default function Video() {
+import { Suspense } from 'react';
+import { list } from '@vercel/blob';
+
+export default function VideoBG() {
   return (
-    <div>
+    <Suspense fallback={<p>Loading video...</p>}>
+      <Video fileName="christmas-lights" />
+    </Suspense>
+  );
+}
+interface VideoProps {
+  fileName: string;
+}
+
+const Video = async ({ fileName }: VideoProps) => {
+  const { blobs } = await list({
+    prefix: fileName,
+  });
+  console.log(blobs);
+  return (
+    <div className="bg-sky-500/35 absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
-        className="absolute left-0 top-0 w-dvw h-dvh"
+        className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10"
         playsInline
         autoPlay
         loop
         muted
       >
-        <source src="/videos/christmas-lights.mp4" type="video/mp4" />
-        <source src="/videos/christmas-lights.webm" type="video/webm" />
+        {blobs.map(({ url }) => (
+          <source src={url} key={url} type={`video/${url.split('.').pop()}`} />
+        ))}
+        {/* <source src="/videos/christmas-lights.webm" type="video/webm" /> */}
       </video>
     </div>
   );
-}
+};
