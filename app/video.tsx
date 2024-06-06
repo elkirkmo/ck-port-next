@@ -9,7 +9,7 @@ export default function VideoBG() {
   );
 }
 
-const backgroundVideoNames = process.env.BG_VIDEO_ARRA?.split(',') || [];
+const backgroundVideoNames = process.env.BG_VIDEO_ARRAY?.split(',') || [];
 console.log(backgroundVideoNames);
 const randomBackground = () =>
   backgroundVideoNames[(Math.random() * backgroundVideoNames.length) | 0];
