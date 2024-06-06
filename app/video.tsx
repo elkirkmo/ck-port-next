@@ -4,10 +4,14 @@ import { list } from '@vercel/blob';
 export default function VideoBG() {
   return (
     <Suspense fallback={<p>Loading video...</p>}>
-      <Video fileName="christmas-lights" />
+      <Video fileName={randomBackground()} />
     </Suspense>
   );
 }
+
+const backgroundVideoNames = process.env.BG_VIDEO_ARRAY;
+const randomBackground = () =>
+  backgroundVideoNames[(Math.random() * backgroundVideoNames.length) | 0];
 interface VideoProps {
   fileName: string;
 }
