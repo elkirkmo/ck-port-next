@@ -1,7 +1,7 @@
-import Image from 'next/image';
+import Link from 'next/link';
 
 import Header from './components/Header';
-import Video from './video';
+import Video from './components/video';
 
 type GithubUser = {
   name: string;
@@ -73,11 +73,9 @@ export default async function Home() {
           </p>
         </a>
 
-        <a
-          href=""
+        <Link
+          href="/live"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <h2 className="mb-3 text-2xl font-semibold">
             Live{' '}
@@ -88,7 +86,7 @@ export default async function Home() {
           <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
             Come see me do a show live!
           </p>
-        </a>
+        </Link>
       </div>
     </main>
   );
