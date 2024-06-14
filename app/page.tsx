@@ -14,7 +14,7 @@ type GithubUser = {
 
 type HomePageLink = {
   name: string;
-  linkText: string;
+  linkText: string | '';
 };
 
 const HomePageLink = ({ linkText, name }: HomePageLink) => {
@@ -53,13 +53,12 @@ export default async function Home() {
         description={user.bio}
       />
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        {Object.keys(pages).map((x) => (
-          <HomePageLink
-            name={x}
-            linkText={pages[x].linkText.toString()}
-            key={x}
-          />
-        ))}
+        {pages.map((x) => {
+          const linkText = x.linkText || '/';
+          return (
+            <HomePageLink name={x.title} linkText={linkText} key={x.title} />
+          );
+        })}
       </div>
     </main>
   );

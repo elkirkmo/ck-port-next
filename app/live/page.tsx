@@ -3,9 +3,16 @@ import Header from '../components/Header';
 import Video from '../components/video';
 import content from '../content';
 
-type pageContent = {
-  pageTitle: string;
-  description: string;
+interface StartTimes {
+  dateTime: string | '';
+  timeZone: string;
+}
+
+type PageContent = {
+  title: string;
+  linkText: string;
+  pageTitle: string | '';
+  description: string | '';
 };
 
 type GCalEvent = {
@@ -13,17 +20,14 @@ type GCalEvent = {
   summary: string;
   description?: string;
   location?: string;
-  start: {
-    dateTime: string;
-    timeZone: string;
-  };
+  start?: StartTimes | {};
 };
 
 type CalendarEventProps = {
   summary: string;
-  description?: string;
-  location?: string;
-  date?: string;
+  description?: string | '';
+  location?: string | '';
+  date?: string | '';
 };
 
 const getEvents = async () => {
@@ -49,7 +53,6 @@ const CalendarEvent = ({
   location,
   date,
 }: CalendarEventProps) => {
-  const test = 'test';
   const formattedDate = new Date(date || '');
   const dateHeaderText = `${formattedDate.getMonth()}/${formattedDate.getDay()}/${formattedDate.getFullYear()} ${formattedDate.getHours()}:${`0${formattedDate.getUTCMinutes()}`.substring(
     -2
@@ -67,32 +70,23 @@ const CalendarEvent = ({
 };
 
 export default async function Page() {
-  const { pageTitle, description }: pageContent = content?.pages?.live;
+  const { pageTitle, description }: PageContent = content?.pages[3];
   const { events } = await getEvents();
   console.log('inside the component', JSON.stringify(events));
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {/* <Video /> */}
-      <Header name={pageTitle} description={description} />
+      <Header name={pageTitle || ''} description={description || ''} />
       <ul>
-        {events.map(
-          ({
-            summary,
-            description,
-            id,
-            location,
-            start: { dateTime, timeZone },
-          }) => (
-            <CalendarEvent
-              key={id}
-              summary={summary}
-              description={description}
-              location={location}
-              date={dateTime}
-              timeZone={timeZone}
-            />
-          )
-        )}
+        {events.map(({ summary, description, id, location, start }) => (
+          <CalendarEvent
+            key={id}
+            summary={summary || ''}
+            description={description || ''}
+            location={location || ''}
+            date={start?.dateTime || ''}
+          />
+        ))}
       </ul>
     </main>
   );
