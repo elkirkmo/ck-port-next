@@ -1,5 +1,30 @@
 import { google } from 'googleapis';
+import Header from '../components/Header';
 import Video from '../components/video';
+import content from '../content';
+
+type pageContent = {
+  pageTitle: string;
+  description: string;
+};
+
+type GCalEvent = {
+  id: string;
+  summary: string;
+  description?: string;
+  location?: string;
+  start: {
+    dateTime: string;
+    timeZone: string;
+  };
+};
+
+type CalendarEventProps = {
+  summary: string;
+  description?: string;
+  location?: string;
+  date?: string;
+};
 
 const getEvents = async () => {
   const apis = google.getSupportedAPIs();
@@ -18,13 +43,57 @@ const getEvents = async () => {
   return json;
 };
 
+const CalendarEvent = ({
+  summary,
+  description,
+  location,
+  date,
+}: CalendarEventProps) => {
+  const test = 'test';
+  const formattedDate = new Date(date || '');
+  const dateHeaderText = `${formattedDate.getMonth()}/${formattedDate.getDay()}/${formattedDate.getFullYear()} ${formattedDate.getHours()}:${`0${formattedDate.getUTCMinutes()}`.substring(
+    -2
+  )}`;
+  return (
+    <li>
+      <div>
+        {date && <h2 className="text-4xl">{dateHeaderText}</h2>}
+        <p className="text-2xl">{summary}</p>
+        {description && <p>{description}</p>}
+        {location && <p>{location}</p>}
+      </div>
+    </li>
+  );
+};
+
 export default async function Page() {
-  const events = await getEvents();
-  console.log('inside the component', events.events);
+  const { pageTitle, description }: pageContent = content?.pages?.live;
+  const { events } = await getEvents();
+  console.log('inside the component', JSON.stringify(events));
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Video />
-      <p>Here we are</p>
+      {/* <Video /> */}
+      <Header name={pageTitle} description={description} />
+      <ul>
+        {events.map(
+          ({
+            summary,
+            description,
+            id,
+            location,
+            start: { dateTime, timeZone },
+          }) => (
+            <CalendarEvent
+              key={id}
+              summary={summary}
+              description={description}
+              location={location}
+              date={dateTime}
+              timeZone={timeZone}
+            />
+          )
+        )}
+      </ul>
     </main>
   );
 }
