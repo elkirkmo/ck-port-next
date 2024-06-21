@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import Header from '../components/Header';
-import Video from '../components/video';
+import Video from '../components/Video';
 import content from '../content';
 
 interface StartTimes {
@@ -39,11 +39,11 @@ const getEvents = async () => {
     calendarId: calID,
   });
   const events = result.data?.items || [];
-  console.log(events);
+  // console.log(events);
   const json = {
     events,
   };
-  console.log(json);
+  // console.log(json);
   return json;
 };
 
@@ -72,7 +72,7 @@ const CalendarEvent = ({
 export default async function Page() {
   const { pageTitle, description }: PageContent = content?.pages[3];
   const { events } = await getEvents();
-  console.log('inside the component', JSON.stringify(events));
+  // console.log('inside the component', JSON.stringify(events));
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {/* <Video /> */}

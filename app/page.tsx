@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import Header from './components/Header';
-import Video from './components/video';
+import VideoBG from './components/Video';
 import content from './content';
 
 type GithubUser = {
@@ -46,7 +46,7 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Video />
+      <VideoBG />
       <Header
         name={user.name}
         location={user.location}
