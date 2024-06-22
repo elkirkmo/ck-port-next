@@ -21,6 +21,7 @@ type GCalEvent = {
   description?: string;
   location?: string;
   start?: StartTimes | {};
+  recurrance?: String[] | [];
 };
 
 type CalendarEventProps = {
@@ -28,6 +29,7 @@ type CalendarEventProps = {
   description?: string | '';
   location?: string | '';
   date?: string | '';
+  recurrance?: String[] | [];
 };
 
 const getEvents = async () => {
@@ -43,7 +45,7 @@ const getEvents = async () => {
   const json = {
     events,
   };
-  console.log(json);
+  // console.log(json);
   return json;
 };
 
@@ -52,19 +54,69 @@ const CalendarEvent = ({
   description,
   location,
   date,
+  recurrance,
 }: CalendarEventProps) => {
   const formattedDate = new Date(date || '');
-  const dateHeaderText = `${formattedDate.getMonth()}/${formattedDate.getDay()}/${formattedDate.getFullYear()} ${formattedDate.getHours()}:${`0${formattedDate.getUTCMinutes()}`.substring(
-    -2
-  )}`;
+  const isRecurringEvent = recurrance && recurrance?.length > 0;
+  console.log(recurrance);
+  /**
+   * formattedHours
+   * To convert the standard 24 hour format of the Date object to 12 hours.
+   *
+   * @returns String Hours in 12 hour format
+   */
+  const formattedHours = () => {
+    return formattedDate.getHours() > 12
+      ? `${formattedDate.getHours() - 12}`
+      : formattedDate.getHours();
+  };
+  /**
+   * formattedMin
+   * To convert the minutes to a standard double digit format
+   *
+   * @returns String minutes with a prepended 0 if less than 10
+   */
+  const formattedMin = () => {
+    const minutes =
+      formattedDate.getUTCMinutes() < 10
+        ? `0${formattedDate.getUTCMinutes()}`
+        : formattedDate.getUTCMinutes().toString();
+    return minutes.substring(1, 2);
+  };
+
+  const weekMap = {
+    MO: 'Monday',
+    TU: 'Tuesday',
+    WE: 'Wednesday',
+    TH: 'Thursday',
+    FR: 'Friday',
+    SA: 'Saturday',
+    SU: 'Sunday',
+  };
+  const amOrPm = formattedDate.getHours() >= 12 ? ' PM' : ' AM';
+  const recurringDay = () => {
+    const dayCode =
+      isRecurringEvent && recurrance[0].split(';').pop()?.split('=').pop();
+    return weekMap[dayCode];
+  };
+
+  const recurringText = () =>
+    isRecurringEvent &&
+    `Weekly on ${recurringDay()} @ ${formattedHours()}:${`0${formattedMin()}`}${amOrPm}`;
+
+  // Format the date to a string
+  const dateHeaderText = `${formattedDate.getMonth()}/${formattedDate.getDay()}/${formattedDate.getFullYear()} @ ${formattedHours()}:${`0${formattedMin()}`}${amOrPm}`;
+
   return (
-    <li>
-      <div>
-        {date && <h2 className="text-4xl">{dateHeaderText}</h2>}
-        <p className="text-2xl">{summary}</p>
-        {description && <p>{description}</p>}
-        {location && <p>{location}</p>}
-      </div>
+    <li className="pb-6">
+      {date && (
+        <h2 className="text-4xl">
+          {isRecurringEvent ? recurringText() : dateHeaderText}
+        </h2>
+      )}
+      <p className="text-2xl">{summary}</p>
+      {description && <p>{description}</p>}
+      {location && <p>{location}</p>}
     </li>
   );
 };
@@ -72,21 +124,23 @@ const CalendarEvent = ({
 export default async function Page() {
   const { pageTitle, description }: PageContent = content?.pages[3];
   const { events } = await getEvents();
-  console.log('inside the component', JSON.stringify(events));
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {/* <Video /> */}
       <Header name={pageTitle || ''} description={description || ''} />
-      <ul>
-        {events.map(({ summary, description, id, location, start }) => (
-          <CalendarEvent
-            key={id}
-            summary={summary || ''}
-            description={description || ''}
-            location={location || ''}
-            date={start?.dateTime || ''}
-          />
-        ))}
+      <ul className="my-4">
+        {events.map(
+          ({ summary, description, id, location, start, recurrence }) => (
+            <CalendarEvent
+              key={id}
+              summary={summary || ''}
+              description={description || ''}
+              location={location || ''}
+              date={start?.dateTime || ''}
+              recurrance={recurrence || []}
+            />
+          )
+        )}
       </ul>
     </main>
   );
