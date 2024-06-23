@@ -21,7 +21,7 @@ type GCalEvent = {
   description?: string;
   location?: string;
   start?: StartTimes | {};
-  recurrance?: String[] | [];
+  recurrance?: string[] | [];
 };
 
 type CalendarEventProps = {
@@ -29,9 +29,8 @@ type CalendarEventProps = {
   description?: string | '';
   location?: string | '';
   date?: string | '';
-  recurrance?: String[] | [];
+  recurrance?: string[] | [];
 };
-
 const getEvents = async () => {
   const apis = google.getSupportedAPIs();
   const calID = process.env.GCAL_CALENDAR_ID;
@@ -84,7 +83,7 @@ const CalendarEvent = ({
     return minutes.substring(1, 2);
   };
 
-  const weekMap = {
+  const weekMap: { [key: string]: any } = {
     MO: 'Monday',
     TU: 'Tuesday',
     WE: 'Wednesday',
@@ -96,7 +95,8 @@ const CalendarEvent = ({
   const amOrPm = formattedDate.getHours() >= 12 ? ' PM' : ' AM';
   const recurringDay = () => {
     const dayCode =
-      isRecurringEvent && recurrance[0].split(';').pop()?.split('=').pop();
+      (isRecurringEvent && recurrance[0].split(';').pop()?.split('=').pop()) ||
+      '';
     return weekMap[dayCode];
   };
 
