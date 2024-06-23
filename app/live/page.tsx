@@ -92,6 +92,7 @@ const CalendarEvent = ({
     SA: 'Saturday',
     SU: 'Sunday',
   };
+
   const amOrPm = formattedDate.getHours() >= 12 ? ' PM' : ' AM';
   const recurringDay = () => {
     const dayCode =
