@@ -11,7 +11,9 @@ export default function VideoBG() {
   );
 }
 
-const backgroundVideoNames = process.env.BG_VIDEO_ARRAY?.split(',') || [];
+const backgroundVideoNames = process.env.BG_VIDEO_ARRAY?.split(',') || [
+  'jellyfish',
+];
 const randomBackground = () =>
   backgroundVideoNames[
     (Math.random() * backgroundVideoNames.length) | 0
@@ -26,19 +28,22 @@ const Video = async ({ fileName }: VideoProps) => {
     prefix: fileName,
   });
   return (
-    <div className=" absolute left-0 top-0 w-lvw h-dvh object-cover">
-      <video
-        className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10"
-        playsInline
-        autoPlay
-        loop
-        muted
-      >
-        {blobs.map(({ url }) => (
-          <source src={url} key={url} type={`video/${url.split('.').pop()}`} />
-        ))}
-        {/* <source src="/videos/christmas-lights.webm" type="video/webm" /> */}
-      </video>
-    </div>
+    <video
+      className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10"
+      playsInline
+      autoPlay
+      loop
+      muted
+    >
+      {blobs.map(({ url }) => (
+        <source
+          src={url}
+          key={url}
+          data-testid={`video-${url.split('.').pop()}`}
+          type={`video/${url.split('.').pop()}`}
+        />
+      ))}
+      {/* <source src="/videos/christmas-lights.webm" type="video/webm" /> */}
+    </video>
   );
 };

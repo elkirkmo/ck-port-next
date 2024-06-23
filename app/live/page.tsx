@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import Header from '../components/Header';
-import Video from '../components/video';
+import Video from '../components/Video';
 import content from '../content';
 
 interface StartTimes {
@@ -40,7 +40,7 @@ const getEvents = async () => {
     calendarId: calID,
   });
   const events = result.data?.items || [];
-  console.log(events);
+  // console.log(events);
   const json = {
     events,
   };
@@ -92,6 +92,7 @@ const CalendarEvent = ({
     SA: 'Saturday',
     SU: 'Sunday',
   };
+
   const amOrPm = formattedDate.getHours() >= 12 ? ' PM' : ' AM';
   const recurringDay = () => {
     const dayCode =
