@@ -22,9 +22,7 @@ interface VideoProps {
 }
 
 const Video = async ({ fileName }: VideoProps) => {
-  const { blobs } = await list({
-    prefix: fileName,
-  });
+  const buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
   return (
     <div className=" absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
@@ -34,10 +32,8 @@ const Video = async ({ fileName }: VideoProps) => {
         loop
         muted
       >
-        {blobs.map(({ url }) => (
-          <source src={url} key={url} type={`video/${url.split('.').pop()}`} />
-        ))}
-        {/* <source src="/videos/christmas-lights.webm" type="video/webm" /> */}
+        <source src={`${buildUrl()}.mp4`} key={buildUrl()} type="video/mp4" />
+        <source src={`${buildUrl()}.webm`} key={buildUrl()} type="video/webm" />
       </video>
     </div>
   );
