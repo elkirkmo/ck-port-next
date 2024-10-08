@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { list } from '@vercel/blob';
 
 export default function VideoBG() {
   return (
