@@ -3,8 +3,8 @@ const content = {
     {
       title: 'development',
       linkText: 'Some of the web projects I&apos; been working on lately',
-      pageTitle: '',
-      description: '',
+      pageTitle: 'Software Development',
+      description: 'Pushing into 2 decades of JavaScript mayhem.',
     },
     {
       title: 'documentary',
