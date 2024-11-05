@@ -1,6 +1,7 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 
 export default function VideoBG() {
+  console.log('heree');
   return (
     <div className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10">
       <Suspense fallback={<p>Loading video...</p>}>
@@ -21,11 +22,8 @@ interface VideoProps {
 }
 
 const Video = async ({ fileName }: VideoProps) => {
-  useEffect(() => {
-    let buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
-    console.log(buildUrl);
-  });
-
+  let buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
+  console.log(`============================${buildUrl()}`);
   return (
     <div className=" absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
