@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import Header from './components/Header';
 import Video from './components/video';
+import Footer from './components/Footer';
 import content from './content';
 
 type GithubUser = {
@@ -60,6 +61,7 @@ export default async function Home() {
           );
         })}
       </div>
+      <Footer />
     </main>
   );
 }
