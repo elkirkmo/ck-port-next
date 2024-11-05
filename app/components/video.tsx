@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 export default function VideoBG() {
   return (
@@ -21,8 +21,11 @@ interface VideoProps {
 }
 
 const Video = async ({ fileName }: VideoProps) => {
-  let buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
-  console.log(buildUrl);
+  useEffect(() => {
+    let buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
+    console.log(buildUrl);
+  });
+
   return (
     <div className=" absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
