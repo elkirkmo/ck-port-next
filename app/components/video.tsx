@@ -21,7 +21,8 @@ interface VideoProps {
 }
 
 const Video = async ({ fileName }: VideoProps) => {
-  const buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
+  let buildUrl = () => `${process.env.S3_BUCKET_URL}${fileName}`;
+  console.log(buildUrl);
   return (
     <div className=" absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
@@ -31,8 +32,16 @@ const Video = async ({ fileName }: VideoProps) => {
         loop
         muted
       >
-        <source src={`${buildUrl()}.mp4`} key={buildUrl()} type="video/mp4" />
-        <source src={`${buildUrl()}.webm`} key={buildUrl()} type="video/webm" />
+        <source
+          src={`${buildUrl()}.mp4`}
+          key={`${buildUrl()}videomp4`}
+          type="video/mp4"
+        />
+        <source
+          src={`${buildUrl()}.webm`}
+          key={`${buildUrl()}videowebm`}
+          type="video/webm"
+        />
       </video>
     </div>
   );

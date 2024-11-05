@@ -2,19 +2,19 @@ const content = {
   pages: [
     {
       title: 'development',
-      linkText: 'Some of the web projects I&apos; been working on lately',
+      linkText: 'Some of the web projects I am working on lately',
       pageTitle: 'Software Development',
       description: 'Pushing into 2 decades of JavaScript mayhem.',
     },
     {
       title: 'documentary',
       linkText: 'Examples of my documentary work',
-      pageTitle: '',
-      description: '',
+      pageTitle: 'Documentary',
+      description: 'Documentary and Journalism projects',
     },
     {
       title: 'film',
-      linkText: 'Examples of my work in film',
+      linkText: 'Friday Night Films',
       pageTitle: '',
       description: '',
     },
