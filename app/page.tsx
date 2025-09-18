@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
+import StickyHeader from './components/StickyHeader';
 import Header from './components/Header';
-import Video from './components/video';
+import FAQSection from './components/FAQ';
 import content from './content';
 
 type GithubUser = {
@@ -42,24 +43,30 @@ export default async function Home() {
   );
   const user: GithubUser = await res.json();
 
-  const { pages } = content;
+  const { pages, FAQ } = content;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {/* <Video /> */}
-      <Header
-        name={user.name || 'Chris Kirkham'}
-        location={user.location || 'United Kingdom'}
-        description={user.bio || 'Web Developer and Digital Filmmaker'}
-      />
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        {pages.map((x) => {
-          const linkText = x.linkText || '/';
-          return (
-            <HomePageLink name={x.title} linkText={linkText} key={x.title} />
-          );
-        })}
-      </div>
-    </main>
+    <>
+      <StickyHeader />
+      <main className="flex min-h-screen flex-col items-center justify-between pb-24">
+        {/* <Video /> */}
+        <Header
+          name={user.name || 'Chris Kirkham'}
+          location={user.location || 'United Kingdom'}
+          description={user.bio || 'Web Developer and Digital Filmmaker'}
+        />
+        <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
+          {pages.map((x) => {
+            const linkText = x.linkText || '/';
+            return (
+              <HomePageLink name={x.title} linkText={linkText} key={x.title} />
+
+            );
+          })}
+
+        </div>
+        <FAQSection arr={FAQ} key="faqSection" />
+      </main>
+    </>
   );
 }
