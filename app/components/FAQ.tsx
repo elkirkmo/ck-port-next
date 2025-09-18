@@ -35,7 +35,7 @@ const FAQItem: React.FC<FAQ> = ({ question, answer }) => {
 
 const FAQSection: React.FC<FAQSectionProps> = ({ arr }) => {
     return (
-        <section className="max-w-2xl mx-auto my-16 p-8 bg-white/80 rounded-xl shadow-lg border border-gray-200">
+        <section id="#faq" className="max-w-2xl mx-auto my-16 p-8 bg-white/80 rounded-xl shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
             <ul>
                 {arr.map((faq) => (

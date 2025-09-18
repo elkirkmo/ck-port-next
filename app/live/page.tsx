@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import StickyHeader from '../components/StickyHeader';
 import Header from '../components/Header';
 import Video from '../components/video';
 import content from '../content';
@@ -126,7 +127,8 @@ export default async function Page() {
   const { events } = await getEvents();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {/* <Video /> */}
+      <StickyHeader
+        {/* <Video /> */}
       <Header name={pageTitle || ''} description={description || ''} />
       <ul className="my-4">
         {events.map(

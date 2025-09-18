@@ -11,7 +11,7 @@ const StickyHeader: React.FC = () => {
 
             {/* Center Links */}
             <nav className="flex flex-col md:flex-row gap-2 md:gap-8 items-center flex-1 justify-center mb-2 md:mb-0">
-                <Link href="#" className="text-lg font-medium hover:underline">Link 1</Link>
+                <Link href="#faq" className="text-lg font-medium hover:underline">FAQ</Link>
                 <Link href="#" className="text-lg font-medium hover:underline">Link 2</Link>
                 <Link href="#" className="text-lg font-medium hover:underline">Link 3</Link>
                 <Link href="#" className="text-lg font-medium hover:underline">Link 4</Link>
