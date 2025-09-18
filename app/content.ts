@@ -10,6 +10,13 @@ export type FAQ = {
   answer: string;
 };
 
+type Card = {
+  image: string;
+  title: string;
+  body: string;
+  link: string;
+};
+
 const content = {
   pages: [
     // {
@@ -49,6 +56,21 @@ const content = {
         'You can reach out to Chris Kirkham via email at ',
     },
   ] as FAQ[],
+  cards:
+    [
+      {
+        image: '/images/example1.jpg',
+        title: 'Card 1',
+        body: 'This is the body of card 1.',
+        link: 'https://example.com/1',
+      },
+      {
+        image: '/images/example1.jpg',
+        title: 'Card 2',
+        body: 'This is the body of card 2.',
+        link: 'https://example.com/2',
+      },
+    ] as Card[],
 };
 
 export default content;

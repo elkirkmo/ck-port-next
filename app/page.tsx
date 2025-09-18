@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import StickyHeader from './components/StickyHeader';
 import Header from './components/Header';
+import CardSection from './components/CardSection';
 import FAQSection from './components/FAQ';
 import content from './content';
 
@@ -43,7 +44,7 @@ export default async function Home() {
   );
   const user: GithubUser = await res.json();
 
-  const { pages, FAQ } = content;
+  const { pages, FAQ, cards } = content;
 
   return (
     <>
@@ -65,6 +66,7 @@ export default async function Home() {
           })}
 
         </div>
+        <CardSection cards={cards} key="cardSection" />
         <FAQSection arr={FAQ} key="faqSection" />
       </main>
     </>

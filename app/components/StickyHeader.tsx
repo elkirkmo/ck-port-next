@@ -1,12 +1,20 @@
 import Link from 'next/link';
 import React from 'react';
 
+import Image from 'next/image';
+
 const StickyHeader: React.FC = () => {
     return (
         <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-3 md:py-4 shadow">
             {/* Logo */}
             <div className="flex items-center mb-2 md:mb-0">
-                <span className="font-bold text-2xl">Logo</span>
+                <Image
+                    src="/assets/images/glasses.png"
+                    alt="Logo"
+                    width={60}
+                    height={60}
+                    className="mr-3"
+                />
             </div>
 
             {/* Center Links */}
