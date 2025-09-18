@@ -3,27 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
+  --foreground-rgb: 255, 0, 255;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+  --theme-cyan-rgb: 0, 255, 255;
+  --theme-magenta-rgb: 255, 0, 255;
+  --theme-yellow-rgb: 255, 255, 0;
+  --theme-black-rgb: 0, 0, 0;
+  --theme-bg-rgb: 255, 0, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 255, 0, 255;
+    --background-start-rgb: 255, 253, 239;
+    --background-end-rgb: 255, 255, 255;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  color: var(--theme-black-rgb);
+  /* color: rgb(var(--foreground-rgb)); */
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+
+.diagonal-gradient-bg {
+  background: linear-gradient(135deg,
+      rgba(var(--theme-cyan-rgb), 10) 0%,
+      rgba(var(--theme-magenta-rgb), 10) 33%,
+      rgba(var(--theme-yellow-rgb), 10) 100%);
 }
 
 @layer utilities {
