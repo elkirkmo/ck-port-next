@@ -3,7 +3,7 @@ const https = require('https');
 
 exports.handler = async (event) => {
     return new Promise((resolve, reject) => {
-        https.get('https://your-bucket.s3.amazonaws.com/content.json', (res) => {
+        https.get(`${process.env.S3_BUCKET_URL}/content.json`, (res) => {
             let data = '';
             res.on('data', chunk => data += chunk);
             res.on('end', () => {
