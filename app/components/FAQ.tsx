@@ -17,7 +17,7 @@ const FAQItem: React.FC<FAQ> = ({ question, answer }) => {
     return (
         <li className="border-b border-gray-200 last:border-none">
             <button
-                className="w-full text-left py-4 px-2 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition"
+                className="w-full text-left py-4 px-2 flex justify-between items-center focus:outline-hidden hover:bg-gray-50 transition"
                 onClick={() => setOpen((o) => !o)}
                 aria-expanded={open}
             >

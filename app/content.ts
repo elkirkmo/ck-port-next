@@ -39,14 +39,14 @@ const content = {
   ] as Page[],
   FAQ: [
     {
-      question: 'What is Chris Kula?',
+      question: 'What is Chris Kirkham?',
       answer:
-        'Chris Kula is a multifaceted creative professional specializing in web development, documentary filmmaking, and live performances. With a passion for storytelling and technology, Chris combines technical expertise with artistic vision to create engaging digital experiences and compelling narratives.',
+        'Chris Kirkham is a multifaceted creative professional specializing in web development, documentary filmmaking, and live performances. With a passion for storytelling and technology, Chris combines technical expertise with artistic vision to create engaging digital experiences and compelling narratives.',
     },
     {
-      question: 'How can I contact Chris Kula?',
+      question: 'How can I contact Chris Kirkham?',
       answer:
-        'You can reach out to Chris Kula via email at ',
+        'You can reach out to Chris Kirkham via email at ',
     },
   ] as FAQ[],
 };

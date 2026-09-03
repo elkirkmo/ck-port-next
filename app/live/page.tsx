@@ -1,4 +1,4 @@
-import { google } from 'googleapis';
+import { google, type calendar_v3 } from 'googleapis';
 import Header from '../components/Header';
 import Video from '../components/video';
 import content from '../content';
@@ -32,20 +32,25 @@ type CalendarEventProps = {
   recurrance?: string[] | [];
 };
 const getEvents = async () => {
-  const apis = google.getSupportedAPIs();
   const calID = process.env.GCAL_CALENDAR_ID;
   const calApiKey = process.env.GCAL_API_KEY;
+
+  // Without credentials the Calendar API returns 403. Bail out early so a
+  // missing env var renders an empty schedule rather than failing the build.
+  if (!calID || !calApiKey) {
+    console.warn('GCAL_CALENDAR_ID or GCAL_API_KEY is unset; skipping fetch.');
+    return { events: [] as calendar_v3.Schema$Event[] };
+  }
+
   const calendar = google.calendar({ version: 'v3', auth: calApiKey });
-  const result = await calendar.events.list({
-    calendarId: calID,
-  });
-  const events = result.data?.items || [];
-  console.log(events);
-  const json = {
-    events,
-  };
-  // console.log(json);
-  return json;
+
+  try {
+    const result = await calendar.events.list({ calendarId: calID });
+    return { events: result.data?.items || [] };
+  } catch (error) {
+    console.error('Failed to load calendar events:', error);
+    return { events: [] as calendar_v3.Schema$Event[] };
+  }
 };
 
 const CalendarEvent = ({
@@ -57,7 +62,6 @@ const CalendarEvent = ({
 }: CalendarEventProps) => {
   const formattedDate = new Date(date || '');
   const isRecurringEvent = recurrance && recurrance?.length > 0;
-  console.log(recurrance);
   /**
    * formattedHours
    * To convert the standard 24 hour format of the Date object to 12 hours.
