@@ -1,27 +1,46 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useSyncExternalStore } from 'react';
+
+const videoNames = (process.env.NEXT_PUBLIC_BG_VIDEO_ARRAY ?? '')
+  .split(',')
+  .map((name) => name.trim())
+  .filter(Boolean);
+
+/**
+ * The background clip is picked at random, so the server and the browser would
+ * disagree if it were chosen during render — a hydration mismatch. Instead the
+ * server snapshot is always null and the choice is made lazily, client-side,
+ * on first read. It is cached so repeated renders keep returning the same clip.
+ */
+let chosen: string | null | undefined;
+
+const subscribe = () => () => {};
+
+const getClientSnapshot = (): string | null => {
+  if (chosen === undefined) {
+    chosen =
+      videoNames.length > 0
+        ? videoNames[Math.floor(Math.random() * videoNames.length)]
+        : null;
+  }
+  return chosen;
+};
+
+const getServerSnapshot = (): string | null => null;
 
 export default function VideoBG() {
-  const [fileName, setFileName] = useState<string | null>(null);
-
-  useEffect(() => {
-    const videoNames =
-      process.env.NEXT_PUBLIC_BG_VIDEO_ARRAY?.split(',').map((v) => v.trim()) ||
-      [];
-    if (videoNames.length > 0) {
-      const idx = Math.floor(Math.random() * videoNames.length);
-      setFileName(videoNames[idx].trim());
-    }
-  }, []);
+  const fileName = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot
+  );
 
   if (!fileName) return null;
 
   return (
-    <div className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10">
-         <Suspense fallback={<div>Loading video...</div>}>
-        <Video fileName={fileName} />
-      </Suspense>
+    <div className="absolute left-0 top-0 w-lvw h-dvh object-cover -z-10">
+      <Video fileName={fileName} />
     </div>
   );
 }
@@ -31,19 +50,19 @@ interface VideoProps {
 }
 
 function Video({ fileName }: VideoProps) {
-  const buildUrl = () =>
-    `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${fileName}`;
+  const url = `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${fileName}`;
+
   return (
     <div className="absolute left-0 top-0 w-lvw h-dvh object-cover">
       <video
-        className="absolute left-0 top-0 w-lvw l-dvh object-cover -z-10"
+        className="absolute left-0 top-0 w-lvw h-dvh object-cover -z-10"
         playsInline
         autoPlay
         loop
         muted
       >
-        <source src={`${buildUrl()}.mp4`} key={buildUrl()} type="video/mp4" />
-        <source src={`${buildUrl()}.webm`} key={buildUrl()} type="video/webm" />
+        <source src={`${url}.mp4`} type="video/mp4" />
+        <source src={`${url}.webm`} type="video/webm" />
       </video>
     </div>
   );

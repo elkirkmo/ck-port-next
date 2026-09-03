@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --foreground-rgb: 255, 0, 255;
@@ -30,16 +28,9 @@ body {
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
-
 .diagonal-gradient-bg {
   background: linear-gradient(135deg,
       rgba(var(--theme-cyan-rgb), 10) 0%,
       rgba(var(--theme-magenta-rgb), 10) 33%,
       rgba(var(--theme-yellow-rgb), 10) 100%);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }

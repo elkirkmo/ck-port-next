@@ -35,3 +35,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# next.js generated agent rules (regenerated on build; disable with agentRules: false)
+/AGENTS.md
+/CLAUDE.md
