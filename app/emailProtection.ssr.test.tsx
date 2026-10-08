@@ -5,7 +5,6 @@ import { describe, expect, it } from '@jest/globals';
 import { renderToString } from 'react-dom/server';
 import ObfuscatedEmail from './components/ObfuscatedEmail';
 import content from './content';
-import contentJson from './content.json';
 import DevelopmentPage from './development/page';
 import Home from './page';
 
@@ -32,8 +31,7 @@ describe('email address stays out of page source', () => {
     expect(html).not.toContain('mailto:');
   });
 
-  it('content.ts and content.json', () => {
+  it('content.ts', () => {
     expect(JSON.stringify(content)).not.toContain(ADDRESS);
-    expect(JSON.stringify(contentJson)).not.toContain(ADDRESS);
   });
 });

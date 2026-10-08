@@ -1,3 +1,8 @@
+/**
+ * Source of truth for the home page cards and FAQ. The content.json that
+ * lambdas/getContent.js serves lives only in S3, is not read by this app,
+ * and has drifted from this file (see #27).
+ */
 export type Page = {
   title: string;
   linkText: string;
