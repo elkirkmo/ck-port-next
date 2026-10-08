@@ -4,14 +4,7 @@ import StickyHeader from './components/StickyHeader';
 import Header from './components/Header';
 import FAQSection from './components/FAQ';
 import content from './content';
-
-type GithubUser = {
-  name: string;
-  bio: string;
-  html_url: string;
-  company: string;
-  location: string;
-};
+import { profile } from './data/development';
 
 type HomePageLink = {
   name: string;
@@ -37,12 +30,7 @@ const HomePageLink = ({ linkText, name }: HomePageLink) => {
   );
 };
 
-export default async function Home() {
-  const res = await fetch(
-    `https://api.github.com/users/${process.env.GITHUB_USER_NAME}`
-  );
-  const user: GithubUser = await res.json();
-
+export default function Home() {
   const { pages, FAQ } = content;
 
   return (
@@ -51,9 +39,9 @@ export default async function Home() {
       <main className="flex min-h-screen flex-col items-center justify-between pb-24">
         {/* <Video /> */}
         <Header
-          name={user.name || 'Chris Kirkham'}
-          location={user.location || 'United Kingdom'}
-          description={user.bio || 'Web Developer and Digital Filmmaker'}
+          name={profile.name}
+          location={profile.location}
+          description="Software Engineer and Digital Filmmaker"
         />
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
           {pages.map((x) => {

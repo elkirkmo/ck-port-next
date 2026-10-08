@@ -8,13 +8,15 @@ export type Page = {
 export type FAQ = {
   question: string;
   answer: string;
+  /** Appends the scraper-protected email (see ObfuscatedEmail) after the answer. */
+  showEmail?: boolean;
 };
 
 const content = {
   pages: [
     {
       title: 'development',
-      linkText: "Some of the web projects I&apos; been working on lately",
+      linkText: "Projects I'm building and the work behind them",
       pageTitle: '',
       description: '',
     },
@@ -45,8 +47,8 @@ const content = {
     },
     {
       question: 'How can I contact Chris Kirkham?',
-      answer:
-        'You can reach out to Chris Kirkham via email at ',
+      answer: 'You can reach out to Chris Kirkham by email:',
+      showEmail: true,
     },
   ] as FAQ[],
 };
