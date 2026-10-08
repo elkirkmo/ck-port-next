@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { describe, expect, it } from '@jest/globals';
-import { formatEventWhen } from './formatEvent';
+import { formatEventWhen, mapUrl } from './formatEvent';
 
 // A server timezone far from Utah: output must not depend on it.
 process.env.TZ = 'Asia/Tokyo';
@@ -41,5 +41,26 @@ describe('formatEventWhen', () => {
   it('returns null without a usable start', () => {
     expect(formatEventWhen({})).toBeNull();
     expect(formatEventWhen({ dateTime: 'not a date' })).toBeNull();
+  });
+});
+
+describe('mapUrl', () => {
+  it('builds a Google Maps search URL with the location URL-encoded', () => {
+    const url = new URL(
+      mapUrl('Level Crossing Brewing Company, 2496 S W Temple St, South Salt Lake, UT 84115, USA')
+    );
+
+    expect(url.origin + url.pathname).toBe('https://www.google.com/maps/search/');
+    expect(url.searchParams.get('api')).toBe('1');
+    expect(url.searchParams.get('query')).toBe(
+      'Level Crossing Brewing Company, 2496 S W Temple St, South Salt Lake, UT 84115, USA'
+    );
+  });
+
+  it('keeps characters like & and # inside the query', () => {
+    const url = new URL(mapUrl('Bar & Grill #2, Salt Lake City'));
+
+    expect(url.searchParams.get('query')).toBe('Bar & Grill #2, Salt Lake City');
+    expect(url.hash).toBe('');
   });
 });

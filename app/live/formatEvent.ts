@@ -57,3 +57,11 @@ export const formatEventWhen = (start: EventStart): string | null => {
 
   return null;
 };
+
+/**
+ * Google Maps' documented cross-platform search URL: opens the Maps app on
+ * phones that have it, the website everywhere else.
+ * https://developers.google.com/maps/documentation/urls/get-started
+ */
+export const mapUrl = (location: string) =>
+  `https://www.google.com/maps/search/?${new URLSearchParams({ api: '1', query: location })}`;
