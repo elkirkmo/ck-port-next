@@ -15,16 +15,6 @@ export type EventStart = {
   timeZone?: string | null;
 };
 
-const weekdays: Record<string, string> = {
-  MO: 'Monday',
-  TU: 'Tuesday',
-  WE: 'Wednesday',
-  TH: 'Thursday',
-  FR: 'Friday',
-  SA: 'Saturday',
-  SU: 'Sunday',
-};
-
 // Some ICU versions put a narrow no-break space (U+202F) before AM/PM; keep
 // output consistent across Node versions.
 const clean = (value: string) => value.replace(/\u202f/g, ' ');
@@ -46,48 +36,17 @@ const formatTime = (date: Date, timeZone: string) =>
     }).format(date)
   );
 
-const formatWeekday = (date: Date, timeZone: string) =>
-  new Intl.DateTimeFormat('en-US', { timeZone, weekday: 'long' }).format(date);
-
-/** Reads "Weekly on …" days from an RRULE, or null if it isn't weekly. */
-const weeklyDays = (recurrence: string[], start: Date, timeZone: string) => {
-  const rule = recurrence.find((line) => line.startsWith('RRULE:'));
-  if (!rule) return null;
-
-  const parts = new Map(
-    rule
-      .slice('RRULE:'.length)
-      .split(';')
-      .map((part) => part.split('=') as [string, string])
-  );
-  if (parts.get('FREQ') !== 'WEEKLY') return null;
-
-  const byDay = parts.get('BYDAY');
-  if (!byDay) return [formatWeekday(start, timeZone)];
-
-  const days = byDay.split(',').map((code) => weekdays[code]);
-  return days.every(Boolean) ? days : null;
-};
-
 /**
- * "3/5/2026 @ 12:30 PM", "Weekly on Thursday @ 7:30 PM", or "3/5/2026" for
- * all-day events. Returns null when there's no usable start.
+ * "3/5/2026 @ 12:30 PM", or "3/5/2026" for all-day events. Returns null when
+ * there's no usable start.
  */
-export const formatEventWhen = (
-  start: EventStart,
-  recurrence: string[] = []
-): string | null => {
+export const formatEventWhen = (start: EventStart): string | null => {
   if (start.dateTime) {
     const date = new Date(start.dateTime);
     if (Number.isNaN(date.getTime())) return null;
 
     const timeZone = start.timeZone || DEFAULT_TIME_ZONE;
-    const time = formatTime(date, timeZone);
-    const days = weeklyDays(recurrence, date, timeZone);
-
-    return days
-      ? `Weekly on ${days.join(' and ')} @ ${time}`
-      : `${formatDate(date, timeZone)} @ ${time}`;
+    return `${formatDate(date, timeZone)} @ ${formatTime(date, timeZone)}`;
   }
 
   if (start.date) {

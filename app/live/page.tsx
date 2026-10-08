@@ -1,7 +1,7 @@
-import { google, type calendar_v3 } from 'googleapis';
 import Header from '../components/Header';
 import Video from '../components/video';
 import content from '../content';
+import { getEvents } from './events';
 import { formatEventWhen, type EventStart } from './formatEvent';
 
 type PageContent = {
@@ -16,28 +16,7 @@ type CalendarEventProps = {
   description?: string | '';
   location?: string | '';
   start?: EventStart;
-  recurrence?: string[];
-};
-const getEvents = async () => {
-  const calID = process.env.GCAL_CALENDAR_ID;
-  const calApiKey = process.env.GCAL_API_KEY;
-
-  // Without credentials the Calendar API returns 403. Bail out early so a
-  // missing env var renders an empty schedule rather than failing the build.
-  if (!calID || !calApiKey) {
-    console.warn('GCAL_CALENDAR_ID or GCAL_API_KEY is unset; skipping fetch.');
-    return { events: [] as calendar_v3.Schema$Event[] };
-  }
-
-  const calendar = google.calendar({ version: 'v3', auth: calApiKey });
-
-  try {
-    const result = await calendar.events.list({ calendarId: calID });
-    return { events: result.data?.items || [] };
-  } catch (error) {
-    console.error('Failed to load calendar events:', error);
-    return { events: [] as calendar_v3.Schema$Event[] };
-  }
+  recurring?: boolean;
 };
 
 const CalendarEvent = ({
@@ -45,19 +24,22 @@ const CalendarEvent = ({
   description,
   location,
   start,
-  recurrence,
+  recurring,
 }: CalendarEventProps) => {
-  const when = start ? formatEventWhen(start, recurrence) : null;
+  const when = start ? formatEventWhen(start) : null;
 
   return (
     <li className="pb-6">
-      {when && <h2 className="text-4xl">{when}</h2>}
+      {when && <h2 className="text-4xl">{recurring ? `Next: ${when}` : when}</h2>}
       <p className="text-2xl">{summary}</p>
       {description && <p>{description}</p>}
       {location && <p>{location}</p>}
     </li>
   );
 };
+
+// Re-render hourly so finished events drop off without a redeploy.
+export const revalidate = 3600;
 
 export default async function Page() {
   const { pageTitle, description }: PageContent = content?.pages[3];
@@ -68,14 +50,14 @@ export default async function Page() {
       <Header name={pageTitle || ''} description={description || ''} />
       <ul className="my-4">
         {events.map(
-          ({ summary, description, id, location, start, recurrence }) => (
+          ({ summary, description, id, location, start, recurringEventId }) => (
             <CalendarEvent
               key={id}
               summary={summary || ''}
               description={description || ''}
               location={location || ''}
               start={start}
-              recurrence={recurrence || []}
+              recurring={Boolean(recurringEventId)}
             />
           )
         )}
