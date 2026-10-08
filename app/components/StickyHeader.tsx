@@ -1,28 +1,30 @@
 import Link from 'next/link';
 import React from 'react';
 
+const links = [
+    { href: '/development', label: 'Development' },
+    { href: '/live', label: 'Live' },
+    { href: '/development#contact', label: 'Contact' },
+];
+
 const StickyHeader: React.FC = () => {
     return (
-        <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-sm flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-3 md:py-4 shadow-sm">
-            {/* Logo */}
-            <div className="flex items-center mb-2 md:mb-0">
-                <span className="font-bold text-2xl">Logo</span>
-            </div>
+        <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-sm flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 md:px-8 py-3 md:py-4 shadow-sm">
+            <Link href="/" className="font-bold text-xl md:text-2xl text-gray-900">
+                Chris Kirkham
+            </Link>
 
-            {/* Center Links */}
-            <nav className="flex flex-col md:flex-row gap-2 md:gap-8 items-center flex-1 justify-center mb-2 md:mb-0">
-                <Link href="#" className="text-lg font-medium hover:underline">Link 1</Link>
-                <Link href="#" className="text-lg font-medium hover:underline">Link 2</Link>
-                <Link href="#" className="text-lg font-medium hover:underline">Link 3</Link>
-                <Link href="#" className="text-lg font-medium hover:underline">Link 4</Link>
+            <nav aria-label="Main">
+                <ul className="flex flex-wrap gap-x-5 gap-y-1 md:gap-x-8">
+                    {links.map(({ href, label }) => (
+                        <li key={href}>
+                            <Link href={href} className="text-base md:text-lg font-medium text-gray-900 hover:underline">
+                                {label}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
             </nav>
-
-            {/* Login Button */}
-            <div className="flex items-center">
-                <button className="diagonal-gradient-bg text-white px-5 py-2 rounded-lg font-semibold shadow-sm hover:opacity-90 transition w-full md:w-auto">
-                    Log In
-                </button>
-            </div>
         </header>
     );
 };
