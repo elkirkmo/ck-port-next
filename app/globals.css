@@ -34,3 +34,9 @@ body {
       rgba(var(--theme-magenta-rgb), 10) 33%,
       rgba(var(--theme-yellow-rgb), 10) 100%);
 }
+
+/* Visible keyboard focus everywhere; high contrast on the light backgrounds. */
+:focus-visible {
+  outline: 3px solid #1f2937;
+  outline-offset: 2px;
+}
