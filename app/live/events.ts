@@ -2,19 +2,22 @@ import { google, type calendar_v3 } from 'googleapis';
 
 type CalendarEvent = calendar_v3.Schema$Event;
 
-/**
- * Keeps only the soonest instance of each recurring series, so a weekly event
- * shows once at its next date instead of filling the list. Expects events
- * already ordered by start time.
- */
-export const nextOccurrences = (events: CalendarEvent[]) => {
-  const seen = new Set<string>();
+/** How far ahead to list each date of a recurring event. */
+export const RECURRING_WINDOW_DAYS = 28;
 
-  return events.filter(({ recurringEventId }) => {
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Lists recurring events date by date, but only within the window, so a weekly
+ * event doesn't fill the page. One-off events always show, however far ahead.
+ */
+export const withinRecurringWindow = (events: CalendarEvent[], now: Date) => {
+  const cutoff = now.getTime() + RECURRING_WINDOW_DAYS * DAY_MS;
+
+  return events.filter(({ recurringEventId, start }) => {
     if (!recurringEventId) return true;
-    if (seen.has(recurringEventId)) return false;
-    seen.add(recurringEventId);
-    return true;
+    const begins = Date.parse(start?.dateTime || start?.date || '');
+    return Number.isNaN(begins) || begins < cutoff;
   });
 };
 
@@ -42,7 +45,7 @@ export const getEvents = async (now: Date = new Date()) => {
       singleEvents: true,
       orderBy: 'startTime',
     });
-    return { events: nextOccurrences(result.data?.items || []) };
+    return { events: withinRecurringWindow(result.data?.items || [], now) };
   } catch (error) {
     console.error('Failed to load calendar events:', error);
     return { events: [] as CalendarEvent[] };

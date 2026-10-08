@@ -38,23 +38,33 @@ describe('getEvents', () => {
     });
   });
 
-  it('keeps only the next instance of each recurring series', async () => {
+  it('lists recurring dates for 4 weeks, and one-off events however far ahead', async () => {
+    const at = (dateTime: string) => ({ start: { dateTime } });
     list.mockResolvedValue({
       data: {
         items: [
-          { id: 'a' },
-          { id: 'trivia-1', recurringEventId: 'trivia' },
-          { id: 'b' },
-          { id: 'trivia-2', recurringEventId: 'trivia' },
-          { id: 'open-mic-1', recurringEventId: 'open-mic' },
+          { id: 'show', ...at('2026-10-08T19:00:00-06:00') },
+          { id: 'trivia-1', recurringEventId: 'trivia', ...at('2026-10-12T18:30:00-06:00') },
+          { id: 'trivia-2', recurringEventId: 'trivia', ...at('2026-10-19T18:30:00-06:00') },
+          { id: 'trivia-4wk', recurringEventId: 'trivia', ...at('2026-11-02T18:30:00-07:00') },
+          // Exactly 28 days after now: outside the window.
+          { id: 'edge', recurringEventId: 'open-mic', ...at('2026-11-04T12:00:00Z') },
+          { id: 'trivia-5wk', recurringEventId: 'trivia', ...at('2026-11-09T18:30:00-07:00') },
+          { id: 'far-show', ...at('2026-12-20T20:00:00-07:00') },
         ],
       },
     });
     const { getEvents } = await load();
 
-    const { events } = await getEvents();
+    const { events } = await getEvents(new Date('2026-10-07T12:00:00Z'));
 
-    expect(events.map(({ id }) => id)).toEqual(['a', 'trivia-1', 'b', 'open-mic-1']);
+    expect(events.map(({ id }) => id)).toEqual([
+      'show',
+      'trivia-1',
+      'trivia-2',
+      'trivia-4wk',
+      'far-show',
+    ]);
   });
 
   it('skips the request without credentials', async () => {

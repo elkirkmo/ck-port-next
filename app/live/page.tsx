@@ -16,7 +16,6 @@ type CalendarEventProps = {
   description?: string | '';
   location?: string | '';
   start?: EventStart;
-  recurring?: boolean;
 };
 
 const CalendarEvent = ({
@@ -24,13 +23,12 @@ const CalendarEvent = ({
   description,
   location,
   start,
-  recurring,
 }: CalendarEventProps) => {
   const when = start ? formatEventWhen(start) : null;
 
   return (
     <li className="pb-6">
-      {when && <h2 className="text-4xl">{recurring ? `Next: ${when}` : when}</h2>}
+      {when && <h2 className="text-4xl">{when}</h2>}
       <p className="text-2xl">{summary}</p>
       {description && <p>{description}</p>}
       {location && <p>{location}</p>}
@@ -50,14 +48,13 @@ export default async function Page() {
       <Header name={pageTitle || ''} description={description || ''} />
       <ul className="px-4">
         {events.map(
-          ({ summary, description, id, location, start, recurringEventId }) => (
+          ({ summary, description, id, location, start }) => (
             <CalendarEvent
               key={id}
               summary={summary || ''}
               description={description || ''}
               location={location || ''}
               start={start}
-              recurring={Boolean(recurringEventId)}
             />
           )
         )}
