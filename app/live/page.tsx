@@ -2,11 +2,7 @@ import { google, type calendar_v3 } from 'googleapis';
 import Header from '../components/Header';
 import Video from '../components/video';
 import content from '../content';
-
-interface StartTimes {
-  dateTime: string | '';
-  timeZone: string;
-}
+import { formatEventWhen, type EventStart } from './formatEvent';
 
 type PageContent = {
   title: string;
@@ -15,21 +11,12 @@ type PageContent = {
   description: string | '';
 };
 
-type GCalEvent = {
-  id: string;
-  summary: string;
-  description?: string;
-  location?: string;
-  start?: StartTimes | {};
-  recurrance?: string[] | [];
-};
-
 type CalendarEventProps = {
   summary: string;
   description?: string | '';
   location?: string | '';
-  date?: string | '';
-  recurrance?: string[] | [];
+  start?: EventStart;
+  recurrence?: string[];
 };
 const getEvents = async () => {
   const calID = process.env.GCAL_CALENDAR_ID;
@@ -57,67 +44,14 @@ const CalendarEvent = ({
   summary,
   description,
   location,
-  date,
-  recurrance,
+  start,
+  recurrence,
 }: CalendarEventProps) => {
-  const formattedDate = new Date(date || '');
-  const isRecurringEvent = recurrance && recurrance?.length > 0;
-  /**
-   * formattedHours
-   * To convert the standard 24 hour format of the Date object to 12 hours.
-   *
-   * @returns String Hours in 12 hour format
-   */
-  const formattedHours = () => {
-    return formattedDate.getHours() > 12
-      ? `${formattedDate.getHours() - 12}`
-      : formattedDate.getHours();
-  };
-  /**
-   * formattedMin
-   * To convert the minutes to a standard double digit format
-   *
-   * @returns String minutes with a prepended 0 if less than 10
-   */
-  const formattedMin = () => {
-    const minutes =
-      formattedDate.getUTCMinutes() < 10
-        ? `0${formattedDate.getUTCMinutes()}`
-        : formattedDate.getUTCMinutes().toString();
-    return minutes.substring(1, 2);
-  };
-
-  const weekMap: { [key: string]: any } = {
-    MO: 'Monday',
-    TU: 'Tuesday',
-    WE: 'Wednesday',
-    TH: 'Thursday',
-    FR: 'Friday',
-    SA: 'Saturday',
-    SU: 'Sunday',
-  };
-  const amOrPm = formattedDate.getHours() >= 12 ? ' PM' : ' AM';
-  const recurringDay = () => {
-    const dayCode =
-      (isRecurringEvent && recurrance[0].split(';').pop()?.split('=').pop()) ||
-      '';
-    return weekMap[dayCode];
-  };
-
-  const recurringText = () =>
-    isRecurringEvent &&
-    `Weekly on ${recurringDay()} @ ${formattedHours()}:${`0${formattedMin()}`}${amOrPm}`;
-
-  // Format the date to a string
-  const dateHeaderText = `${formattedDate.getMonth()}/${formattedDate.getDay()}/${formattedDate.getFullYear()} @ ${formattedHours()}:${`0${formattedMin()}`}${amOrPm}`;
+  const when = start ? formatEventWhen(start, recurrence) : null;
 
   return (
     <li className="pb-6">
-      {date && (
-        <h2 className="text-4xl">
-          {isRecurringEvent ? recurringText() : dateHeaderText}
-        </h2>
-      )}
+      {when && <h2 className="text-4xl">{when}</h2>}
       <p className="text-2xl">{summary}</p>
       {description && <p>{description}</p>}
       {location && <p>{location}</p>}
@@ -140,8 +74,8 @@ export default async function Page() {
               summary={summary || ''}
               description={description || ''}
               location={location || ''}
-              date={start?.dateTime || ''}
-              recurrance={recurrence || []}
+              start={start}
+              recurrence={recurrence || []}
             />
           )
         )}
