@@ -3,7 +3,8 @@ import { render, screen, within } from '@testing-library/react';
 
 // Registered before the page is imported (see the dynamic import below), so
 // the page's googleapis import gets this mock. Items arrive as the API returns
-// them with singleEvents: recurring series expanded into instances.
+// them with singleEvents: recurring series expanded into instances. Dates are
+// in the past relative to the real clock, so all fall inside the 4-week window.
 jest.mock('googleapis', () => ({
   google: {
     calendar: () => ({
@@ -43,7 +44,7 @@ describe('/live page', () => {
     process.env.GCAL_API_KEY = 'test-key';
   });
 
-  it('lists one-off events by date and recurring events once, at their next date', async () => {
+  it('lists every date, recurring and one-off, in order', async () => {
     const { default: Page } = await import('./page');
     render(await Page());
 
@@ -51,8 +52,8 @@ describe('/live page', () => {
     const headings = within(list)
       .getAllByRole('heading', { level: 2 })
       .map((h) => h.textContent);
-    expect(headings).toEqual(['Next: 3/4/2026 @ 7:00 PM', '3/5/2026 @ 9:30 PM']);
-    expect(screen.getAllByText('Pub trivia')).toHaveLength(1);
+    expect(headings).toEqual(['3/4/2026 @ 7:00 PM', '3/5/2026 @ 9:30 PM', '3/11/2026 @ 7:00 PM']);
+    expect(screen.getAllByText('Pub trivia')).toHaveLength(2);
     expect(screen.getByText('Standup showcase')).toBeInTheDocument();
   });
 });
