@@ -45,10 +45,10 @@ export default async function Page() {
   const { pageTitle, description }: PageContent = content?.pages[3];
   const { events } = await getEvents();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between px-4 py-12 sm:p-24">
+    <main className="flex min-h-screen flex-col items-center gap-12 pb-24">
       {/* <Video /> */}
       <Header name={pageTitle || ''} description={description || ''} />
-      <ul className="my-4">
+      <ul className="px-4">
         {events.map(
           ({ summary, description, id, location, start, recurringEventId }) => (
             <CalendarEvent

@@ -1,8 +1,6 @@
 import Link from 'next/link';
 
-import StickyHeader from './components/StickyHeader';
 import Header from './components/Header';
-import FAQSection from './components/FAQ';
 import content from './content';
 import { profile } from './data/development';
 
@@ -31,19 +29,18 @@ const HomePageLink = ({ linkText, name }: HomePageLink) => {
 };
 
 export default function Home() {
-  const { pages, FAQ } = content;
+  const { pages } = content;
 
   return (
     <>
-      <StickyHeader />
-      <main className="flex min-h-screen flex-col items-center justify-between pb-24">
+      <main className="flex min-h-screen flex-col items-center gap-12 pb-24">
         {/* <Video /> */}
         <Header
           name={profile.name}
           location={profile.location}
           description="Software Engineer and Digital Filmmaker"
         />
-        <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
+        <div className="grid text-center lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
           {pages.map((x) => {
             const linkText = x.linkText || '/';
             return (
@@ -53,7 +50,6 @@ export default function Home() {
           })}
 
         </div>
-        <FAQSection arr={FAQ} key="faqSection" />
       </main>
     </>
   );

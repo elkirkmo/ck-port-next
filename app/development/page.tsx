@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import {
   awards,
   earlierExperience,
@@ -46,11 +45,6 @@ export default function DevelopmentPage() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd(profile)) }}
       />
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-        <nav aria-label="Breadcrumb" className="mb-8 text-sm">
-          <Link href="/" className="text-gray-800 underline underline-offset-2">
-            Home
-          </Link>
-        </nav>
         <main className="space-y-16">
           <header className="space-y-4">
             <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
