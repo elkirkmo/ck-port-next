@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 /**
  * The address is stored in base64-encoded pieces and only joined in the
  * browser after a click, so it never appears in server-rendered HTML, the RSC
- * payload or content.json. This stops ordinary scrapers; it is not secrecy.
+ * payload or content.ts. This stops ordinary scrapers; it is not secrecy.
  *
  * The pieces are encoded, not plain strings, because the minifier constant-
  * folds plain pieces back into the full address in the client JS bundle.
