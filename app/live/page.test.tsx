@@ -21,6 +21,7 @@ jest.mock('googleapis', () => ({
               {
                 id: 'one-off',
                 summary: 'Standup showcase',
+                location: 'Wiseguys Comedy Club, 194 S 400 W, Salt Lake City, UT 84101',
                 // Not the Denver fallback, so a dropped timeZone shows up.
                 start: { dateTime: '2026-03-05T21:30:00-05:00', timeZone: 'America/New_York' },
               },
@@ -55,5 +56,21 @@ describe('/live page', () => {
     expect(headings).toEqual(['3/4/2026 @ 7:00 PM', '3/5/2026 @ 9:30 PM', '3/11/2026 @ 7:00 PM']);
     expect(screen.getAllByText('Pub trivia')).toHaveLength(2);
     expect(screen.getByText('Standup showcase')).toBeInTheDocument();
+  });
+
+  it('links each location to Google Maps, in a new tab', async () => {
+    const { default: Page } = await import('./page');
+    render(await Page());
+
+    const link = screen.getByRole('link', {
+      name: 'Wiseguys Comedy Club, 194 S 400 W, Salt Lake City, UT 84101 (opens Google Maps in a new tab)',
+    });
+    const url = new URL(link.getAttribute('href') || '');
+    expect(url.origin + url.pathname).toBe('https://www.google.com/maps/search/');
+    expect(url.searchParams.get('query')).toBe(
+      'Wiseguys Comedy Club, 194 S 400 W, Salt Lake City, UT 84101'
+    );
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
 });

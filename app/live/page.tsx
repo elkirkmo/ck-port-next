@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import Video from '../components/video';
 import content from '../content';
 import { getEvents } from './events';
-import { formatEventWhen, type EventStart } from './formatEvent';
+import { formatEventWhen, mapUrl, type EventStart } from './formatEvent';
 
 type PageContent = {
   title: string;
@@ -31,7 +31,19 @@ const CalendarEvent = ({
       {when && <h2 className="text-4xl">{when}</h2>}
       <p className="text-2xl">{summary}</p>
       {description && <p>{description}</p>}
-      {location && <p>{location}</p>}
+      {location && (
+        <p>
+          <a
+            href={mapUrl(location)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2"
+          >
+            {location}
+            <span className="sr-only"> (opens Google Maps in a new tab)</span>
+          </a>
+        </p>
+      )}
     </li>
   );
 };
