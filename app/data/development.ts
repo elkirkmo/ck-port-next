@@ -115,7 +115,7 @@ export const projects: Project[] = [
     url: 'https://31for31.vercel.app',
     summary:
       'A Halloween-season site with 31 horror, spooky and Halloween films to watch every October, with sets for 2024 and 2025 and 2026 coming.',
-    role: 'Solo developer, built with Claude Code.',
+    role: 'Solo developer. I built it in 2024 and have used Claude Code on it since summer 2026.',
     details: [
       'Svelte frontend, Python/Flask REST API and a Supabase database, plus a service that pulls streaming availability for each film.',
     ],
