@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element -- screenshots are optional, small, and supplied by hand */
+import Image from 'next/image';
 import type { Project } from '../../data/development';
 import ExternalLink from './ExternalLink';
 import { secondaryButton } from './buttonStyles';
@@ -13,10 +13,13 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <article className="flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white/80 shadow-sm">
       {image ? (
-        <img
+        <Image
           src={image.src}
           alt={image.alt}
-          className="aspect-video w-full object-cover"
+          width={1280}
+          height={720}
+          sizes="(min-width: 896px) 412px, (min-width: 768px) 50vw, 100vw"
+          className="aspect-video w-full border-b border-gray-300 object-cover object-top"
         />
       ) : (
         // Placeholder until a real screenshot is added to the data file.

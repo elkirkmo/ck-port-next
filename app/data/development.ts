@@ -30,7 +30,10 @@ export type Project = {
   role: string;
   details: string[];
   tags: string[];
-  /** Real screenshots only. Without one, the card shows a styled placeholder. */
+  /**
+   * A real screenshot, 1280x720 (16:9), in public/images/projects/. Without
+   * one, the card shows a styled placeholder.
+   */
   image?: { src: string; alt: string };
 };
 
@@ -102,6 +105,10 @@ export const projects: Project[] = [
       'Stack chosen on purpose: popular, well-documented technologies, so LLM-written code stays readable and a person can take over if the agents or a developer drop out.',
     ],
     tags: ['Python', 'TypeScript', 'Claude API', 'Self-hosted LLMs', 'AI agents', 'Monorepo'],
+    image: {
+      src: '/images/projects/trulyfreepress.jpg',
+      alt: 'Screenshot of the TrulyFreePress.org home page',
+    },
   },
   {
     name: '31for31',
@@ -113,6 +120,10 @@ export const projects: Project[] = [
       'Svelte frontend, Python/Flask REST API and a Supabase database, plus a service that pulls streaming availability for each film.',
     ],
     tags: ['Svelte', 'Python', 'Flask', 'Supabase', 'REST API', 'Vercel'],
+    image: {
+      src: '/images/projects/31for31.jpg',
+      alt: 'Screenshot of the 31for31 film list for October 2025',
+    },
   },
   {
     name: 'chriskirkham.com',
@@ -120,6 +131,10 @@ export const projects: Project[] = [
     role: 'Solo developer.',
     details: ['Google Calendar API powers the live event listings.'],
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Jest/RTL', 'Vercel'],
+    image: {
+      src: '/images/projects/chriskirkham.jpg',
+      alt: 'Screenshot of the chriskirkham.com home page',
+    },
   },
 ];
 

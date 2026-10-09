@@ -42,8 +42,11 @@ describe('/development page', () => {
     const region = screen.getByRole('region', { name: 'Live projects' });
 
     expect(within(region).getAllByRole('article')).toHaveLength(projects.length);
-    for (const { name, url, tags } of projects) {
+    for (const { name, url, tags, image } of projects) {
       expect(within(region).getByRole('heading', { level: 3, name })).toBeInTheDocument();
+      if (image) {
+        expect(within(region).getByRole('img', { name: image.alt })).toBeInTheDocument();
+      }
       const stack = within(region).getByRole('list', { name: `${name} tech stack` });
       expect(within(stack).getAllByRole('listitem')).toHaveLength(tags.length);
       if (url) {
